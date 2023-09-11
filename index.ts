@@ -2,6 +2,10 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { bmiArguments, calculateBmi } from './bmiCalculator';
+import {
+    exerciseArguments,
+    exerciseCalculator
+  } from './exerciseCalculator';
 const app = express()
 app.use(bodyParser.json())
 
@@ -28,6 +32,27 @@ app.get('/bmi', (req, res) => {
           height: heightInCm,
           bmi: bmi
         });
+      } catch (e) {
+        res.status(400);
+        res.send({ error: e.message });
+      }
+    }
+});
+  
+app.post('/exercises', (req, res) => {
+    const dailyExercises = req.body.daily_exercises;
+    const dailyTarget = req.body.target;
+  
+    if (!dailyExercises || !dailyTarget) {
+      res.status(400);
+      res.send({ error: 'missing parameter daily_exercises or target' });
+    } else {
+      try {
+        const { target, dailyExerciseHours } = exerciseArguments(
+          dailyTarget,
+          dailyExercises
+        );
+        res.send(exerciseCalculator(target, dailyExerciseHours));
       } catch (e) {
         res.status(400);
         res.send({ error: e.message });

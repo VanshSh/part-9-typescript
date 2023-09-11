@@ -3,7 +3,7 @@ interface ExerciseValues {
   dailyExerciseHours: Array<number>;
 }
 
-export const parseExerciseArguments = (
+export const exerciseArguments = (
   target: number,
   dailyExercises: Array<number>
 ): ExerciseValues => {
