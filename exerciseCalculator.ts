@@ -1,3 +1,21 @@
+interface ExerciseValues {
+  target: number;
+  dailyExerciseHours: Array<number>;
+}
+
+export const parseExerciseArguments = (
+  target: number,
+  dailyExercises: Array<number>
+): ExerciseValues => {
+  if (!isNaN(target) && !dailyExercises.some(isNaN)) {
+    return {
+      target: target,
+      dailyExerciseHours: dailyExercises
+    };
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+};
 
 interface AverageValues {
   periodLength: number;
@@ -8,43 +26,38 @@ interface AverageValues {
   target: number;
   average: number;
 }
-function calculateExercises(dailyExerciseHours:number[], targetNumber:number):AverageValues {
-    const NUMBER_OF_DAYS = dailyExerciseHours.length;
-    const NUMBER_OF_TRAINING_DAYS = dailyExerciseHours.filter(
-      (day:number) => day > 0
-    ).length;
-    const AVERAGE =
-      dailyExerciseHours.reduce((a:number, b:number) => a + b, 0) / NUMBER_OF_DAYS;
-    const IS_SUCCESS = AVERAGE > targetNumber;
-    let RATING;
-    if (AVERAGE > 0 && AVERAGE < 2) {
-      RATING = 1;
-    } else if (AVERAGE >= 2 && AVERAGE < 3) {
-      RATING = 2;
-    } else {
-      RATING = 3;
-    }
-  
-    let RATING_DESCRIPTION;
-    if (RATING == 1) {
-      RATING_DESCRIPTION = 'need improvement';
-    } else if (RATING == 2) {
-      RATING_DESCRIPTION = 'not too bad but could be better';
-    } else {
-      RATING_DESCRIPTION = 'doing GREAT, keep pushing your boundaries';
-    }
-    return {
-      periodLength: NUMBER_OF_DAYS,
-      trainingDays: NUMBER_OF_TRAINING_DAYS,
-      success: IS_SUCCESS,
-      rating: RATING,
-      ratingDescription: RATING_DESCRIPTION,
-      target: targetNumber,
-      average: AVERAGE,
-    };
+
+export const exerciseCalculator = (
+  target: number,
+  dailyExerciseHours: Array<number>
+): AverageValues => {
+  const periodLength = dailyExerciseHours.length;
+  const trainingDays = dailyExerciseHours.filter((day) => day > 0).length;
+  const average = dailyExerciseHours.reduce((a, b) => a + b, 0) / periodLength;
+
+  const success = average >= target ? true : false;
+
+  let rating;
+  let ratingDescription;
+
+  if (average < target) {
+    rating = 1;
+    ratingDescription = 'not too bad but could be better';
+  } else if (average === target) {
+    rating = 2;
+    ratingDescription = 'good';
+  } else {
+    rating = 3;
+    ratingDescription = 'very good';
   }
-  
-  const exerciseDays = [3, 0, 2, 4.5, 0, 3, 1];
-  const target = 2;
-  console.log(calculateExercises(exerciseDays, target));
-  
+
+  return {
+    periodLength: periodLength,
+    trainingDays: trainingDays,
+    success: success,
+    rating: rating,
+    ratingDescription: ratingDescription,
+    target: target,
+    average: average
+  };
+};
