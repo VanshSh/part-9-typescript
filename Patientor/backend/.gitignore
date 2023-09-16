@@ -1,6 +1,8 @@
 # Ignore MongoDB data files
 /data/
 /dbpath
+/build/
+
 
 # Ignore Node.js dependencies
 /node_modules/
