@@ -1,9 +1,10 @@
 import express from "express";
 const patientsRouter = express.Router();
-import data from "../../data/pateints"
+import patientServices from "../services/patientServices";
+
 
 patientsRouter.get('/', (_req, res) => {
-    res.send(data)
+    res.send(patientServices.getAll())
 })
 
 export default patientsRouter
