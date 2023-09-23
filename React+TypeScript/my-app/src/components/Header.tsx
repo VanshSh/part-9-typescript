@@ -1,9 +1,6 @@
 import React from 'react'
+import { HeaderProps } from '../types'
 
-const Header = ({courseName}:{courseName:string}) => {
-  return (
-    <h1>{courseName}</h1>
-  )
-}
+const Header: React.FC<HeaderProps> = ({courseName}) => <h1> {courseName} </h1>
 
 export default Header
